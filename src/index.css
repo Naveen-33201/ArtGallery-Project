@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --accent-gold: #B5894C;
+  --accent-deep: #1F3B5B;
+  --beige: #F6F1EB;
+}
+
+body { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial }
+.font-serif { font-family: 'Playfair Display', serif }
