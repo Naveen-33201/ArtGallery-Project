@@ -7,51 +7,54 @@ import VirtualTour from "./pages/VirtualTour";
 import ArtworkDetailModal from "./components/ArtworkDetailModal";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import CheckoutPage from "./pages/checkout";
+
+// ✅ FIXED: Correct name + correct case in path
+import CheckoutPage from "./pages/Checkout";
+
 import PaymentSuccess from "./pages/PaymentSuccess";
 import UploadArtwork from "./pages/UploadArtwork";
 
-import SettingsPage from "./pages/SettingsPage.jsx";  // ⬅️ make sure this line exists
+import SettingsPage from "./pages/SettingsPage.jsx";
 import AdminPanel from "./pages/AdminPanel.jsx";
 import ManageUsers from "./pages/ManageUsers.jsx";
 
 export default function App() {
-  const [role, setRole] = useState(null)            // null = not logged in
-  const [menuOpen, setMenuOpen] = useState(true)
+  const [role, setRole] = useState(null);           // null = not logged in
+  const [menuOpen, setMenuOpen] = useState(true);
   // 'home' | 'gallery' | 'tour' | 'checkout' | 'paymentSuccess' | 'upload' | 'settings' | 'admin' | 'manageUsers'
-  const [route, setRoute] = useState('home')
-  const [selected, setSelected] = useState(null)    // artwork for modal
-  const [authView, setAuthView] = useState('login') // 'login' | 'signup'
-  const [checkoutArtwork, setCheckoutArtwork] = useState(null) // artwork for payment flow
+  const [route, setRoute] = useState("home");
+  const [selected, setSelected] = useState(null);   // artwork for modal
+  const [authView, setAuthView] = useState("login"); // 'login' | 'signup'
+  const [checkoutArtwork, setCheckoutArtwork] = useState(null); // artwork for payment flow
 
-  const openArtwork = (art) => setSelected(art)
-  const closeArtwork = () => setSelected(null)
+  const openArtwork = (art) => setSelected(art);
+  const closeArtwork = () => setSelected(null);
 
   // when user clicks Buy in the modal
   const handleBuy = (art) => {
-    setCheckoutArtwork(art)
-    setSelected(null)
-    setRoute('checkout')
-  }
+    setCheckoutArtwork(art);
+    setSelected(null);
+    setRoute("checkout");
+  };
 
   const handleLogout = () => {
-    setRole(null)
-    setAuthView('login')
-  }
+    setRole(null);
+    setAuthView("login");
+  };
 
   // ---------- AUTH SCREENS ----------
   if (!role) {
-    return authView === 'login' ? (
+    return authView === "login" ? (
       <Login
         onLogin={(r) => {
-          setRole(r)
-          setRoute('home')
+          setRole(r);
+          setRoute("home");
         }}
-        onSwitchToSignup={() => setAuthView('signup')}
+        onSwitchToSignup={() => setAuthView("signup")}
       />
     ) : (
-      <Signup onSwitchToLogin={() => setAuthView('login')} />
-    )
+      <Signup onSwitchToLogin={() => setAuthView("login")} />
+    );
   }
 
   // ---------- MAIN APP ----------
@@ -70,68 +73,57 @@ export default function App() {
 
         <main className="flex-1">
           {/* HOME DASHBOARD */}
-          {route === 'home' && (
+          {route === "home" && (
             <HomeDashboard
               role={role}
               onOpenArtwork={openArtwork}
-              onStartTour={() => setRoute('tour')}
+              onStartTour={() => setRoute("tour")}
             />
           )}
 
           {/* GALLERY – reads artworks from MongoDB inside GalleryPage */}
-          {route === 'gallery' && (
-            <GalleryPage
-              role={role}
-              onOpen={openArtwork}
-            />
+          {route === "gallery" && (
+            <GalleryPage role={role} onOpen={openArtwork} />
           )}
 
           {/* VIRTUAL TOUR */}
-          {route === 'tour' && (
-            <VirtualTour onOpenArtwork={openArtwork} />
-          )}
+          {route === "tour" && <VirtualTour onOpenArtwork={openArtwork} />}
 
           {/* ARTIST: UPLOAD ARTWORK PAGE */}
-          {route === 'upload' && role === 'Artist' && (
-            <UploadArtwork onDone={() => setRoute('gallery')} />
+          {route === "upload" && role === "Artist" && (
+            <UploadArtwork onDone={() => setRoute("gallery")} />
           )}
 
           {/* CHECKOUT PAGE */}
-          {route === 'checkout' && (
+          {route === "checkout" && (
             <CheckoutPage
               artwork={checkoutArtwork}
-              onBack={() => setRoute('gallery')}
-              onPaymentSuccess={() => setRoute('paymentSuccess')}
+              onBack={() => setRoute("gallery")}
+              onPaymentSuccess={() => setRoute("paymentSuccess")}
             />
           )}
 
           {/* PAYMENT SUCCESS / RECEIPT */}
-          {route === 'paymentSuccess' && (
+          {route === "paymentSuccess" && (
             <PaymentSuccess
               artwork={checkoutArtwork}
               role={role}
               onDone={() => {
-                setRoute('gallery')
-                setCheckoutArtwork(null)
+                setRoute("gallery");
+                setCheckoutArtwork(null);
               }}
             />
           )}
 
           {/* SETTINGS – any logged-in role */}
-          {route === 'settings' && (
-            <SettingsPage
-              onLogout={handleLogout}
-            />
-          )}
+          {route === "settings" && <SettingsPage onLogout={handleLogout} />}
 
           {/* ADMIN PAGES – Admin only */}
-          {route === 'admin' && role === 'Admin' && (
+          {route === "admin" && role === "Admin" && (
             <AdminPanel role={role} />
           )}
 
-          {route === 'manageUsers' && role === 'Admin' && (
-            <ManageUsers />
-          )}
+          {route === "manageUsers" && role === "Admin" && <ManageUsers />}
         </main>
       </div>
 
@@ -142,5 +134,5 @@ export default function App() {
         onBuy={handleBuy}
       />
     </div>
-  )
+  );
 }
